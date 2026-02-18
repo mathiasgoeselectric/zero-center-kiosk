@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  margin:0;
+  background:black;
+  overflow:hidden;
+}
+
+img {
+  width:100vw;
+  height:100vh;
+  object-fit:contain;
+  user-select:none;
+  -webkit-user-drag:none;
+}
+</style>
+</head>
+
+<body>
+
+<img id="gallery">
+
+<script>
+const images = [
+  "F77_Mach 2 _Cosmic-Black (1).jpg",
+  "F77_Mach 2_Asteroid-Grey (1).jpg",
+  "F77_Mach 2_Stealth-Grey (1).jpg"
+];
+
+let current = 0;
+const img = document.getElementById("gallery");
+
+function show() {
+  img.src = images[current];
+}
+
+show();
+
+// swipe handling
+let startX = 0;
+
+document.addEventListener("touchstart", e=>{
+  startX = e.touches[0].clientX;
+});
+
+document.addEventListener("touchend", e=>{
+  let endX = e.changedTouches[0].clientX;
+
+  if(startX - endX > 50){
+    current = (current + 1) % images.length;
+  }
+
+  if(endX - startX > 50){
+    current = (current - 1 + images.length) % images.length;
+  }
+
+  show();
+});
+
+// disable right click
+document.addEventListener("contextmenu", e=>e.preventDefault());
+</script>
+
+</body>
+</html>
