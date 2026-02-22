@@ -51,27 +51,48 @@ show();
 
 // swipe handling
 let startX = 0;
+let startY = 0;
 
-document.addEventListener("touchstart", e=>{
+document.addEventListener("touchstart", e => {
   startX = e.touches[0].clientX;
+  startY = e.touches[0].clientY;
 });
 
-document.addEventListener("touchend", e=>{
+document.addEventListener("touchend", e => {
   let endX = e.changedTouches[0].clientX;
+  let endY = e.changedTouches[0].clientY;
 
-  if(startX - endX > 50){
-    current = (current + 1) % images.length;
-  }
+  let diffX = startX - endX;
+  let diffY = startY - endY;
 
-  if(endX - startX > 50){
-    current = (current - 1 + images.length) % images.length;
+  const threshold = 50;
+
+  // decide if swipe is horizontal or vertical
+  if (Math.abs(diffX) > Math.abs(diffY)) {
+    // horizontal swipe
+    if (diffX > threshold) {
+      // swipe left → next
+      current = (current + 1) % images.length;
+    } else if (diffX < -threshold) {
+      // swipe right → previous
+      current = (current - 1 + images.length) % images.length;
+    }
+  } else {
+    // vertical swipe
+    if (diffY > threshold) {
+      // swipe up → next
+      current = (current + 1) % images.length;
+    } else if (diffY < -threshold) {
+      // swipe down → previous
+      current = (current - 1 + images.length) % images.length;
+    }
   }
 
   show();
 });
 
 // disable right click
-document.addEventListener("contextmenu", e=>e.preventDefault());
+document.addEventListener("contextmenu", e => e.preventDefault());
 </script>
 
 </body>
