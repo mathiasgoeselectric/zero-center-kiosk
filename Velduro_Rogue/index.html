@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+  margin:0;
+  background:black;
+  overflow:hidden;
+}
+
+img {
+  width:100vw;
+  height:100vh;
+  object-fit:contain;
+  user-select:none;
+  -webkit-user-drag:none;
+}
+</style>
+</head>
+
+<body>
+
+<img id="gallery">
+
+<script>
+const images = [
+  "1_velduro_spec_rogue_X_4.1.png",
+  "3_velduro_spec_rogue_R_4.1.png",
+  "4_Rogue geometry.png",
+];
+
+let current = 0;
+const img = document.getElementById("gallery");
+
+function show() {
+  img.src = images[current];
+}
+
+show();
+
+// swipe handling
+let startX = 0;
+let startY = 0;
+
+document.addEventListener("touchstart", e => {
+  startX = e.touches[0].clientX;
+  startY = e.touches[0].clientY;
+});
+
+document.addEventListener("touchend", e => {
+  let endX = e.changedTouches[0].clientX;
+  let endY = e.changedTouches[0].clientY;
+
+  let diffX = startX - endX;
+  let diffY = startY - endY;
+
+  const threshold = 50;
+
+  // decide if swipe is horizontal or vertical
+  if (Math.abs(diffX) > Math.abs(diffY)) {
+    // horizontal swipe
+    if (diffX > threshold) {
+      // swipe left → next
+      current = (current + 1) % images.length;
+    } else if (diffX < -threshold) {
+      // swipe right → previous
+      current = (current - 1 + images.length) % images.length;
+    }
+  } else {
+    // vertical swipe
+    if (diffY > threshold) {
+      // swipe up → next
+      current = (current + 1) % images.length;
+    } else if (diffY < -threshold) {
+      // swipe down → previous
+      current = (current - 1 + images.length) % images.length;
+    }
+  }
+
+  show();
+});
+
+// disable right click
+document.addEventListener("contextmenu", e => e.preventDefault());
+</script>
+
+</body>
+</html>
